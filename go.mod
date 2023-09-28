@@ -1,3 +1,3 @@
-module github.com/dcarbone/esmodels
+module github.com/dcarbone/go-esmodels
 
 go 1.21.1
