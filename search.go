@@ -376,8 +376,9 @@ type Query struct {
 	MatchAll  *MatchAll  `json:"match_all,omitempty"`
 	MatchNone *MatchNone `json:"match_none,omitempty"`
 
-	Bool *Bool            `json:"bool,omitempty"`
-	Term map[string]*Term `json:"term,omitempty"`
+	Bool  *Bool            `json:"bool,omitempty"`
+	Term  map[string]Term  `json:"term,omitempty"`
+	Match map[string]Match `json:"match,omitempty"`
 }
 
 func NewQuery(opts ...func(*Query)) *Query {
@@ -403,13 +404,23 @@ func (q *Query) SetBool(b *Bool) *Query {
 	return q
 }
 
-func (q *Query) SetTerm(field string, tq *Term) *Query {
+func (q *Query) SetTerm(field string, t Term) *Query {
 	q.mu.Lock()
 	defer q.mu.Unlock()
 	if q.Term == nil {
-		q.Term = make(map[string]*Term)
+		q.Term = make(map[string]Term)
 	}
-	q.Term[field] = tq
+	q.Term[field] = t
+	return q
+}
+
+func (q *Query) SetMatch(field string, m Match) *Query {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	if q.Match == nil {
+		q.Match = make(map[string]Match)
+	}
+	q.Match[field] = m
 	return q
 }
 
